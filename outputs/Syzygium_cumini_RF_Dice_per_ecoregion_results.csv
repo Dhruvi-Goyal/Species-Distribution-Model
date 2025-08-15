@@ -1,0 +1,17 @@
+ecoregion,accuracy,tpr,tnr,n_test_points,n_presence_test,n_absence_test
+Aravalli_west_thorn_scrub_forests,0.8620689655172413,0.625,0.9523809523809523,29,8,21
+Central_Deccan_Plateau_dry_deciduous_forests,0.9666666666666667,1.0,0.9230769230769231,30,17,13
+Deccan_thorn_scrub_forests,0.9285714285714286,0.8333333333333334,0.9666666666666667,42,12,30
+East_Deccan_dry_evergreen_forests,0.9230769230769231,0.8333333333333334,1.0,13,6,7
+East_Deccan_moist_deciduous_forests,0.9655172413793104,1.0,0.9285714285714286,29,15,14
+Khathiar_Gir_dry_deciduous_forests,0.96875,1.0,0.9333333333333333,32,17,15
+Lower_Gangetic_Plains_moist_deciduous_forests,0.9411764705882353,1.0,0.8888888888888888,17,8,9
+Malabar_Coast_moist_forests,0.9736842105263158,0.9811320754716981,0.9565217391304348,76,53,23
+Narmada_Valley_dry_deciduous_forests,1.0,1.0,1.0,29,17,12
+North_Western_Ghats_moist_deciduous_forests,0.9,0.8,1.0,10,5,5
+North_Western_Ghats_montane_rain_forests,0.9230769230769231,1.0,0.75,13,9,4
+Orissa_semi_evergreen_forests,0.9166666666666666,0.8,1.0,12,5,7
+South_Deccan_Plateau_dry_deciduous_forests,0.9523809523809523,0.92,1.0,42,25,17
+South_Western_Ghats_moist_deciduous_forests,0.95,1.0,0.8571428571428571,20,13,7
+South_Western_Ghats_montane_rain_forests,0.9375,0.875,1.0,16,8,8
+Upper_Gangetic_Plains_moist_deciduous_forests,0.9166666666666666,1.0,0.8571428571428571,24,10,14

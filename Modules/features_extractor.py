@@ -82,7 +82,8 @@ class Feature_Extractor():
                 reducer=ee.Reducer.first(),
                 geometry=point,
                 scale=30,
-                maxPixels=1e13
+                maxPixels=1e13,
+                crs='EPSG:4326'
             ).getInfo()
 
             for bio_code, bio_name in bioclim_names.items():
@@ -105,7 +106,8 @@ class Feature_Extractor():
                         reducer=ee.Reducer.first(),
                         geometry=point,
                         scale=10,
-                        maxPixels=1e13
+                        maxPixels=1e13,
+                        crs='EPSG:4326'
                     ).get(band).getInfo()
                     all_values[name] = value if value is not None else float('nan')
                 except Exception as e:
@@ -131,8 +133,20 @@ class Feature_Extractor():
         for bio_code, bio_name in bioclim_names.items():
             try:
                 band = bioclim_region.select([bio_code])
-                min_val = band.reduceRegion(ee.Reducer.min(), region, 500, 1e13).getInfo().get(bio_code, float('nan'))
-                max_val = band.reduceRegion(ee.Reducer.max(), region, 500, 1e13).getInfo().get(bio_code, float('nan'))
+                min_val = band.reduceRegion(
+                    reducer=ee.Reducer.min(), 
+                    geometry=region, 
+                    scale=500, 
+                    maxPixels=1e13,
+                    crs='EPSG:4326'
+                ).getInfo().get(bio_code, float('nan'))
+                max_val = band.reduceRegion(
+                    reducer=ee.Reducer.max(), 
+                    geometry=region, 
+                    scale=500, 
+                    maxPixels=1e13,
+                    crs='EPSG:4326'
+                ).getInfo().get(bio_code, float('nan'))
                 min_max_dict[bio_name] = {'min': min_val, 'max': max_val}
             except Exception as e:
                 print(f"Error getting min/max for {bio_name}: {str(e)}")
@@ -148,8 +162,20 @@ class Feature_Extractor():
         }.items():
             try:
                 band = 'elevation' if name == 'elevation' else 'b1'
-                min_val = asset.reduceRegion(ee.Reducer.min(), region, 500, 1e13).getInfo().get(band, float('nan'))
-                max_val = asset.reduceRegion(ee.Reducer.max(), region, 500, 1e13).getInfo().get(band, float('nan'))
+                min_val = asset.reduceRegion(
+                    reducer=ee.Reducer.min(), 
+                    geometry=region, 
+                    scale=500, 
+                    maxPixels=1e13,
+                    crs='EPSG:4326'
+                ).getInfo().get(band, float('nan'))
+                max_val = asset.reduceRegion(
+                    reducer=ee.Reducer.max(), 
+                    geometry=region, 
+                    scale=500, 
+                    maxPixels=1e13,
+                    crs='EPSG:4326'
+                ).getInfo().get(band, float('nan'))
                 min_max_dict[name] = {'min': min_val, 'max': max_val}
             except Exception as e:
                 print(f"Error getting min/max for {name}: {str(e)}")

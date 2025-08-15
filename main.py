@@ -16,6 +16,7 @@ import threading
 import queue
 from sklearn.model_selection import train_test_split
 from Modules.feature_sensitivity_analysis import FeatureSensitivityAnalyzer
+from Modules.models import perform_feature_importance_for_all_species
 ee.Authenticate()
 ee.Initialize(project='sigma-bay-425614-a6')
 
@@ -359,35 +360,31 @@ def perform_feature_sensitivity_analysis(model, X, feature_names):
     for feature, score in sorted(importance_scores.items(), key=lambda x: x[1], reverse=True):
         print(f"{feature}: {score:.4f}")
 
+def compute_rank_correlation(prob_file, similarity_file, similarity_col, output_csv):
+    """
+    Compute Spearman rank correlation between similarity and average probability for ecoregions.
+    Args:
+        prob_file: CSV file with columns ['Ecoregion', 'Average_Probability']
+        similarity_file: CSV file with columns ['Ecoregion', similarity_col]
+        similarity_col: Name of the similarity column to use (e.g., 'Euclidean_Similarity')
+        output_csv: Path to save merged results with correlation value
+    Returns:
+        corr: Spearman rank correlation coefficient
+        pval: p-value
+    """
+    prob_df = pd.read_csv(prob_file)
+    sim_df = pd.read_csv(similarity_file)
+    merged = pd.merge(prob_df, sim_df, on='Ecoregion')
+    corr, pval = spearmanr(merged[similarity_col], merged['Average_Probability'])
+    print(f"Spearman rank correlation: {corr:.4f} (p={pval:.4g})")
+    merged['Rank_Correlation'] = corr
+    merged.to_csv(output_csv, index=False)
+    return corr, pval
+
 def main():
-    print("Loading data...")
-    modelss = models.Models()
-    features_extractor_obj = features_extractor.Feature_Extractor(ee)
-    X, y, coords, feature_cols, reliability_weights, bias_weights = modelss.load_data(
-        presence_path='data/testing_SDM/presence_points_Dalbergia_all_india.csv',
-        absence_path='data/testing_SDM/absence_points_dalbergia_all_india.csv'
-    )
-    
-    # Combine weights
-    sample_weights = reliability_weights * bias_weights
-    
-    print("\nTraining with Tversky Loss (RF)...")
-    clf_tversky = modelss.train_with_tversky_scoring(X, y, sample_weights, model_type='rf')
-    
-    # Perform feature sensitivity analysis
-    perform_feature_sensitivity_analysis(
-        clf_tversky,
-        X,
-        feature_cols
-    )
-    
-    # print("\nGenerating predictions for all ecoregions...")
-    # test_model_on_all_ecoregions(
-    #     clf_tversky,
-    #     features_extractor_obj,
-    #     modelss,
-    #     output_file='outputs/testing_SDM_out/all_india_dalbergia_avg_prob_RF_TVERSKY.txt'
-    # )
+    # Feature importance analysis is now run from Modules/models.py
+    # No need to call perform_feature_importance_for_all_species from main.py
+    pass
 
 if __name__ == "__main__":
     main()

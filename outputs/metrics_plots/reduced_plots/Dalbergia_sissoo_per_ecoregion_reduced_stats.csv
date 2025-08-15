@@ -1,0 +1,10 @@
+ecoregion,species,model,loss_function,model_loss,accuracy,tpr
+Central_Deccan_Plateau_dry_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.6907477545324356,0.7241032272500223
+Deccan_thorn_scrub_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.6196048404737116,0.7168422348711847
+East_Deccan_moist_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.7026411579963265,0.6789767993043577
+Khathiar_Gir_dry_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.7174940122906278,0.5555224637546985
+Lower_Gangetic_Plains_moist_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.8207017765712281,0.6692639795946411
+Malabar_Coast_moist_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.8023420246278423,0.7270914487463028
+Narmada_Valley_dry_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.8498349321995784,0.6884713992255275
+South_Deccan_Plateau_dry_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.6537457790044167,0.6252035257764679
+Upper_Gangetic_Plains_moist_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.6091263556757002,0.8205828902440194

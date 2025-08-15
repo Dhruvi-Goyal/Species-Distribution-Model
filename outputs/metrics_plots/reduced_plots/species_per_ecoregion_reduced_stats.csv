@@ -1,0 +1,26 @@
+ecoregion,species,model,loss_function,model_loss,accuracy,tpr
+Central_Deccan_Plateau_dry_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.6907477545324356,0.7241032272500223
+Deccan_thorn_scrub_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.6196048404737116,0.7168422348711847
+East_Deccan_moist_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.7026411579963265,0.6789767993043577
+Khathiar_Gir_dry_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.7174940122906278,0.5555224637546985
+Lower_Gangetic_Plains_moist_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.8207017765712281,0.6692639795946411
+Malabar_Coast_moist_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.8023420246278423,0.7270914487463028
+Narmada_Valley_dry_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.8498349321995784,0.6884713992255275
+South_Deccan_Plateau_dry_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.6537457790044167,0.6252035257764679
+Upper_Gangetic_Plains_moist_deciduous_forests,Dalbergia sissoo,RF,Dice,RF_Dice,0.6091263556757002,0.8205828902440194
+Aravalli_west_thorn_scrub_forests,Syzygium cumini,RF,Dice,RF_Dice,0.8432752446272821,0.5811400255489899
+Central_Deccan_Plateau_dry_deciduous_forests,Syzygium cumini,RF,Dice,RF_Dice,0.7516525005530514,0.9555124521241988
+Deccan_thorn_scrub_forests,Syzygium cumini,RF,Dice,RF_Dice,0.9253214847690289,0.8360783521946294
+East_Deccan_dry_evergreen_forests,Syzygium cumini,RF,Dice,RF_Dice,0.7152501575469706,0.7994046834603575
+East_Deccan_moist_deciduous_forests,Syzygium cumini,RF,Dice,RF_Dice,0.9506420164969619,0.7590064538469675
+Khathiar_Gir_dry_deciduous_forests,Syzygium cumini,RF,Dice,RF_Dice,0.9777675402901068,0.9963648484863024
+Lower_Gangetic_Plains_moist_deciduous_forests,Syzygium cumini,RF,Dice,RF_Dice,0.7309631874774155,0.7817141666309996
+Malabar_Coast_moist_forests,Syzygium cumini,RF,Dice,RF_Dice,0.7371177822236811,0.7445920195141353
+Narmada_Valley_dry_deciduous_forests,Syzygium cumini,RF,Dice,RF_Dice,0.9836036430424581,0.8369190887188294
+North_Western_Ghats_moist_deciduous_forests,Syzygium cumini,RF,Dice,RF_Dice,0.7147689249971441,0.7407641627347127
+North_Western_Ghats_montane_rain_forests,Syzygium cumini,RF,Dice,RF_Dice,0.6990389845177574,0.9780277589173197
+Orissa_semi_evergreen_forests,Syzygium cumini,RF,Dice,RF_Dice,0.6947644761244581,0.7979672313333173
+South_Deccan_Plateau_dry_deciduous_forests,Syzygium cumini,RF,Dice,RF_Dice,0.7442052421014288,0.8962124162171979
+South_Western_Ghats_moist_deciduous_forests,Syzygium cumini,RF,Dice,RF_Dice,0.8793497211343425,0.7823964663848918
+South_Western_Ghats_montane_rain_forests,Syzygium cumini,RF,Dice,RF_Dice,0.7308393978776353,0.7153701819050041
+Upper_Gangetic_Plains_moist_deciduous_forests,Syzygium cumini,RF,Dice,RF_Dice,0.8921806988818203,0.7953910911694134

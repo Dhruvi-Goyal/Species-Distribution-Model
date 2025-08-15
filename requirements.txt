@@ -7,3 +7,4 @@ tqdm
 scipy
 scikit-learn
 requests
+folium

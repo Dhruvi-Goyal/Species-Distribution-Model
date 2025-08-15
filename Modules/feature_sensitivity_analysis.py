@@ -124,54 +124,90 @@ class FeatureSensitivityAnalyzer:
             results: Dictionary from analyze_all_features
             save_path: Path to save the plots (optional)
         """
-        # Create directory for individual plots if save_path is provided
+        # Create directory for plots if save_path is provided
         if save_path:
             plot_dir = os.path.dirname(save_path)
-            individual_plot_dir = os.path.join(plot_dir, 'individual_feature_plots')
-            os.makedirs(individual_plot_dir, exist_ok=True)
+            os.makedirs(plot_dir, exist_ok=True)
         
-        # Plot all features in a grid
-        n_features = len(results)
-        n_cols = 3
-        n_rows = (n_features + n_cols - 1) // n_cols
+        # Get list of features
+        feature_names = list(results.keys())
+        n_features = len(feature_names)
         
-        plt.figure(figsize=(20, 5*n_rows))
+        # Create multiple files with 4 plots each
+        plots_per_file = 4
+        n_files = (n_features + plots_per_file - 1) // plots_per_file
         
-        for i, (feature_name, (actual_values, _, probs)) in enumerate(results.items()):
-            # Main grid plot
-            plt.subplot(n_rows, n_cols, i+1)
-            plt.plot(actual_values, probs, 'b-', linewidth=2)
-            plt.title(feature_name, fontsize=12)
-            plt.xlabel('Actual Feature Value', fontsize=10)
-            plt.ylabel('Probability', fontsize=10)
-            plt.grid(True)
+        for file_idx in range(n_files):
+            start_idx = file_idx * plots_per_file
+            end_idx = min((file_idx + 1) * plots_per_file, n_features)
+            current_features = feature_names[start_idx:end_idx]
+            
+            # Create figure for this batch
+            n_current = len(current_features)
+            fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+            axes = axes.flatten()
+            
+            for i, feature_name in enumerate(current_features):
+                if i < len(axes):
+                    actual_values, _, probs = results[feature_name]
+                    
+                    # Plot on current subplot
+                    axes[i].plot(actual_values, probs, 'b-', linewidth=2)
+                    axes[i].set_title(feature_name, fontsize=14, fontweight='bold')
+                    axes[i].set_xlabel('Actual Feature Value', fontsize=12)
+                    axes[i].set_ylabel('Probability', fontsize=12)
+                    axes[i].grid(True, alpha=0.3)
+                    
+                    # Add more x-axis ticks
+                    x_min, x_max = np.min(actual_values), np.max(actual_values)
+                    x_ticks = np.linspace(x_min, x_max, 8)
+                    axes[i].set_xticks(x_ticks)
+                    axes[i].tick_params(axis='x', rotation=45)
+                    
+                    # Set y-axis limits for consistency
+                    axes[i].set_ylim(0, 1)
+            
+            # Hide unused subplots
+            for i in range(n_current, len(axes)):
+                axes[i].set_visible(False)
+            
+            # Adjust layout
+            plt.tight_layout()
+            
+            # Save this batch
+            if save_path:
+                base_name = os.path.splitext(os.path.basename(save_path))[0]
+                batch_file = os.path.join(plot_dir, f'{base_name}_batch_{file_idx + 1}.png')
+                plt.savefig(batch_file, dpi=300, bbox_inches='tight')
+                print(f"Saved feature sensitivity batch {file_idx + 1} to: {batch_file}")
+            
+            plt.close()
+        
+        # Also create individual plots for each feature
+        for feature_name, (actual_values, _, probs) in results.items():
+            plt.figure(figsize=(12, 8))
+            plt.plot(actual_values, probs, 'b-', linewidth=3)
+            plt.title(f'Feature Sensitivity: {feature_name}', fontsize=16, fontweight='bold')
+            plt.xlabel('Actual Feature Value', fontsize=14)
+            plt.ylabel('Probability', fontsize=14)
+            plt.grid(True, alpha=0.3)
+            plt.ylim(0, 1)
             
             # Add more x-axis ticks
             x_min, x_max = np.min(actual_values), np.max(actual_values)
             x_ticks = np.linspace(x_min, x_max, 10)
             plt.xticks(x_ticks, rotation=45)
             
-            # Individual plot
-            plt.figure(figsize=(12, 8))
-            plt.plot(actual_values, probs, 'b-', linewidth=2)
-            plt.title(f'Feature Sensitivity: {feature_name}', fontsize=14)
-            plt.xlabel('Actual Feature Value', fontsize=12)
-            plt.ylabel('Probability', fontsize=12)
-            plt.grid(True)
-            plt.xticks(x_ticks, rotation=45)
-            
             if save_path:
-                individual_plot_path = os.path.join(individual_plot_dir, f'{feature_name}_sensitivity.png')
+                individual_plot_path = os.path.join(plot_dir, f'{feature_name}_sensitivity.png')
                 plt.savefig(individual_plot_path, dpi=300, bbox_inches='tight')
-                plt.close()
+            
+            plt.close()
         
-        # Save the grid plot
         if save_path:
-            plt.tight_layout()
-            plt.savefig(save_path, dpi=300, bbox_inches='tight')
-            print(f"\nSensitivity plots saved to: {save_path}")
-            print(f"Individual feature plots saved to: {individual_plot_dir}")
-        plt.show()
+            print(f"\nFeature sensitivity plots saved to: {plot_dir}")
+            print(f"Created {n_files} batch files with {plots_per_file} plots each")
+            print(f"Created {n_features} individual feature plots")
     
     def get_feature_importance(self, results: Dict[str, Tuple[np.ndarray, np.ndarray, np.ndarray]]) -> Dict[str, float]:
         """

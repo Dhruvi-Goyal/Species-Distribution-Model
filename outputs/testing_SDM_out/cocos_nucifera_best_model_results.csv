@@ -1,0 +1,2 @@
+model,loss,accuracy,f1_score,precision,recall,tpr,tnr,threshold,tp,tn,fp,fn,n_training_points,n_testing_points
+RF,Focal,0.9931640625,0.9931707317073171,0.9922027290448343,0.994140625,0.994140625,0.9921875,0.39473684210526316,509,508,4,3,4092,1024

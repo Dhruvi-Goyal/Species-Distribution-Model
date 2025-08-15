@@ -1,0 +1,3 @@
+species,model_loss,accuracy_mean,accuracy_std,accuracy_min,accuracy_max,accuracy_count,tpr_mean,tpr_std,tpr_min,tpr_max,tnr_mean,tnr_std,tnr_min,tnr_max
+Dalbergia sissoo,RF_Dice,0.7185,0.0878,0.6091,0.8498,9,0.6896,0.0734,0.5555,0.8206,0.7097,0.0949,0.5642,0.8782
+Syzygium cumini,RF_Dice,0.8107,0.1075,0.6948,0.9836,16,0.8123,0.1058,0.5811,0.9964,0.8117,0.0951,0.6055,0.9624

@@ -1,0 +1,9 @@
+{
+  "model_evaluations": {
+    "Random_Forest_Dice_Loss_CustomTraining": {
+      "accuracy": 0.7391304347826086,
+      "auc": 0.7386363636363636,
+      "tpr": 0.7272727272727273,
+      "tnr": 0.75,
+      "confusion_matrix": [
+        

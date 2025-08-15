@@ -36,7 +36,7 @@ Users must provide the following inputs in the `Inputs` folder:
 
 1. **Polygon**: A file in **WKT (Well-Known Text)** format representing the region of interest.
 2. **Genus Name**: The genus for which the SDM will be generated.
-3. **Reliability Threshold**: A threshold value for **pseudo-absence generation**.
+3. **Reliability Threshold**: A threshold value of **0.03** for **pseudo-absence generation** (filters out points too similar to presence locations).
 
 ---
 

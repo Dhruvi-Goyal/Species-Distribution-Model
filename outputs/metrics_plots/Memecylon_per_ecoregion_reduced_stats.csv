@@ -1,0 +1,8 @@
+ecoregion,genus,model,loss_function,model_loss,accuracy,tnr
+Deccan_thorn_scrub_forests,Memecylon,RF,Dice,RF_Dice,0.9230769230769232,1.0
+East_Deccan_dry_evergreen_forests,Memecylon,RF,Dice,RF_Dice,0.6,0.75
+Malabar_Coast_moist_forests,Memecylon,RF,Dice,RF_Dice,0.8571428571428571,1.0
+North_Western_Ghats_moist_deciduous_forests,Memecylon,RF,Dice,RF_Dice,1.0,1.0
+North_Western_Ghats_montane_rain_forests,Memecylon,RF,Dice,RF_Dice,0.9375,1.0
+South_Deccan_Plateau_dry_deciduous_forests,Memecylon,RF,Dice,RF_Dice,0.9090909090909092,0.8571428571428571
+South_Western_Ghats_montane_rain_forests,Memecylon,RF,Dice,RF_Dice,0.9375,1.0

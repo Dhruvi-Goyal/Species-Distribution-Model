@@ -1,0 +1,13 @@
+model_loss,accuracy,optimal_threshold,tpr,tnr,macro avg_precision,macro avg_recall,macro avg_f1-score,macro avg_support,weighted avg_precision,weighted avg_recall,weighted avg_f1-score,weighted avg_support
+Random_Forest_Original_Loss,1.0,0.5,1.0,1.0,1.0,1.0,1.0,5.0,1.0,1.0,1.0,5.0
+Random_Forest_Dice_Loss,1.0,0.1,1.0,1.0,1.0,1.0,1.0,5.0,1.0,1.0,1.0,5.0
+Random_Forest_Focal_Loss,1.0,0.1,1.0,1.0,1.0,1.0,1.0,5.0,1.0,1.0,1.0,5.0
+Random_Forest_Tversky_Loss,1.0,0.1,1.0,1.0,1.0,1.0,1.0,5.0,1.0,1.0,1.0,5.0
+Logistic_Regression_Original_Loss,1.0,0.5,1.0,1.0,1.0,1.0,1.0,5.0,1.0,1.0,1.0,5.0
+Logistic_Regression_Dice_Loss,1.0,0.1,1.0,1.0,1.0,1.0,1.0,5.0,1.0,1.0,1.0,5.0
+Logistic_Regression_Focal_Loss,1.0,0.1,1.0,1.0,1.0,1.0,1.0,5.0,1.0,1.0,1.0,5.0
+Logistic_Regression_Tversky_Loss,1.0,0.1,1.0,1.0,1.0,1.0,1.0,5.0,1.0,1.0,1.0,5.0
+Weighted_Logistic_Regression_Original_Loss,1.0,0.5,1.0,1.0,1.0,1.0,1.0,5.0,1.0,1.0,1.0,5.0
+Weighted_Logistic_Regression_Dice_Loss,1.0,0.14210526315789473,1.0,1.0,1.0,1.0,1.0,5.0,1.0,1.0,1.0,5.0
+Weighted_Logistic_Regression_Focal_Loss,1.0,0.14210526315789473,1.0,1.0,1.0,1.0,1.0,5.0,1.0,1.0,1.0,5.0
+Weighted_Logistic_Regression_Tversky_Loss,1.0,0.14210526315789473,1.0,1.0,1.0,1.0,1.0,5.0,1.0,1.0,1.0,5.0

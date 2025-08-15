@@ -1,0 +1,164 @@
+{
+  "species_name": "Cocos nucifera",
+  "model_evaluations": {
+    "Random_Forest_Original_Loss_CustomTraining": {
+      "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (5, 5143) + inhomogeneous part."
+    },
+    "Random_Forest_Dice_Loss_CustomTraining": {
+      "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (5, 5143) + inhomogeneous part."
+    },
+    "Random_Forest_Focal_Loss_CustomTraining": {
+      "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (5, 5143) + inhomogeneous part."
+    },
+    "Random_Forest_Tversky_Loss_CustomTraining": {
+      "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (5, 5143) + inhomogeneous part."
+    },
+    "Logistic_Regression_Original_Loss_CustomTraining": {
+      "accuracy": 0.9397473275024295,
+      "confusion_matrix": [
+        [
+          489,
+          28
+        ],
+        [
+          34,
+          478
+        ]
+      ],
+      "classification_report": {
+        "0.0": {
+          "precision": 0.9349904397705545,
+          "recall": 0.9458413926499033,
+          "f1-score": 0.9403846153846154,
+          "support": 517.0
+        },
+        "1.0": {
+          "precision": 0.9446640316205533,
+          "recall": 0.93359375,
+          "f1-score": 0.9390962671905697,
+          "support": 512.0
+        },
+        "accuracy": 0.9397473275024295,
+        "macro avg": {
+          "precision": 0.9398272356955539,
+          "recall": 0.9397175713249517,
+          "f1-score": 0.9397404412875925,
+          "support": 1029.0
+        },
+        "weighted avg": {
+          "precision": 0.9398037332858115,
+          "recall": 0.9397473275024295,
+          "f1-score": 0.9397435713852457,
+          "support": 1029.0
+        }
+      },
+      "optimal_threshold": 0.5,
+      "tpr": 0.93359375,
+      "tnr": 0.9458413926499033
+    },
+    "Logistic_Regression_Dice_Loss_CustomTraining": {
+      "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (5, 5143) + inhomogeneous part."
+    },
+    "Logistic_Regression_Focal_Loss_CustomTraining": {
+      "accuracy": 0.9397473275024295,
+      "confusion_matrix": [
+        [
+          489,
+          28
+        ],
+        [
+          34,
+          478
+        ]
+      ],
+      "classification_report": {
+        "0.0": {
+          "precision": 0.9349904397705545,
+          "recall": 0.9458413926499033,
+          "f1-score": 0.9403846153846154,
+          "support": 517.0
+        },
+        "1.0": {
+          "precision": 0.9446640316205533,
+          "recall": 0.93359375,
+          "f1-score": 0.9390962671905697,
+          "support": 512.0
+        },
+        "accuracy": 0.9397473275024295,
+        "macro avg": {
+          "precision": 0.9398272356955539,
+          "recall": 0.9397175713249517,
+          "f1-score": 0.9397404412875925,
+          "support": 1029.0
+        },
+        "weighted avg": {
+          "precision": 0.9398037332858115,
+          "recall": 0.9397473275024295,
+          "f1-score": 0.9397435713852457,
+          "support": 1029.0
+        }
+      },
+      "optimal_threshold": 0.5,
+      "tpr": 0.93359375,
+      "tnr": 0.9458413926499033
+    },
+    "Logistic_Regression_Tversky_Loss_CustomTraining": {
+      "accuracy": 0.9397473275024295,
+      "confusion_matrix": [
+        [
+          489,
+          28
+        ],
+        [
+          34,
+          478
+        ]
+      ],
+      "classification_report": {
+        "0.0": {
+          "precision": 0.9349904397705545,
+          "recall": 0.9458413926499033,
+          "f1-score": 0.9403846153846154,
+          "support": 517.0
+        },
+        "1.0": {
+          "precision": 0.9446640316205533,
+          "recall": 0.93359375,
+          "f1-score": 0.9390962671905697,
+          "support": 512.0
+        },
+        "accuracy": 0.9397473275024295,
+        "macro avg": {
+          "precision": 0.9398272356955539,
+          "recall": 0.9397175713249517,
+          "f1-score": 0.9397404412875925,
+          "support": 1029.0
+        },
+        "weighted avg": {
+          "precision": 0.9398037332858115,
+          "recall": 0.9397473275024295,
+          "f1-score": 0.9397435713852457,
+          "support": 1029.0
+        }
+      },
+      "optimal_threshold": 0.5,
+      "tpr": 0.93359375,
+      "tnr": 0.9458413926499033
+    },
+    "Weighted_Logistic_Regression_Original_Loss_CustomTraining": {
+      "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (5, 5143) + inhomogeneous part."
+    },
+    "Weighted_Logistic_Regression_Dice_Loss_CustomTraining": {
+      "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (5, 5143) + inhomogeneous part."
+    },
+    "Weighted_Logistic_Regression_Focal_Loss_CustomTraining": {
+      "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (5, 5143) + inhomogeneous part."
+    },
+    "Weighted_Logistic_Regression_Tversky_Loss_CustomTraining": {
+      "error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 2 dimensions. The detected shape was (5, 5143) + inhomogeneous part."
+    }
+  },
+  "presence_count": 2632,
+  "absence_count": 2632,
+  "feature_count": 25
+}

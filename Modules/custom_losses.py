@@ -221,3 +221,54 @@ def optimize_threshold_for_tpr(y_true, y_pred_proba, min_accuracy=0.5):
             best_threshold = threshold
 
     return best_threshold, best_tpr
+
+def optimize_threshold_for_metric(y_true, y_pred_proba, metric='tpr', min_accuracy=0.5):
+    """
+    Generic threshold optimization function that can optimize for different metrics.
+    
+    Parameters:
+    -----------
+    y_true : array-like
+        True labels
+    y_pred_proba : array-like
+        Predicted probabilities
+    metric : str, default='tpr'
+        Metric to optimize for: 'tpr', 'tnr', 'f1', 'balanced_accuracy'
+    min_accuracy : float, default=0.5
+        Minimum accuracy threshold
+        
+    Returns:
+    --------
+    tuple
+        (optimal_threshold, best_metric_value)
+    """
+    from sklearn.metrics import f1_score, balanced_accuracy_score, confusion_matrix
+    
+    thresholds = np.linspace(0.1, 0.9, 20)
+    best_threshold = 0.5
+    best_metric_value = 0
+
+    for threshold in thresholds:
+        y_pred = (y_pred_proba >= threshold).astype(int)
+        accuracy = accuracy_score(y_true, y_pred)
+        
+        if accuracy < min_accuracy:
+            continue
+            
+        if metric == 'tpr':
+            metric_value = recall_score(y_true, y_pred)
+        elif metric == 'tnr':
+            tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+            metric_value = tn / (tn + fp) if (tn + fp) > 0 else 0
+        elif metric == 'f1':
+            metric_value = f1_score(y_true, y_pred)
+        elif metric == 'balanced_accuracy':
+            metric_value = balanced_accuracy_score(y_true, y_pred)
+        else:
+            raise ValueError(f"Unknown metric: {metric}. Supported: 'tpr', 'tnr', 'f1', 'balanced_accuracy'")
+
+        if metric_value > best_metric_value:
+            best_metric_value = metric_value
+            best_threshold = threshold
+
+    return best_threshold, best_metric_value

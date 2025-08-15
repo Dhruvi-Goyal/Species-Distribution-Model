@@ -1,0 +1,143 @@
+{
+  "species_name": "Miconia crenata",
+  "model_evaluations": {
+    "Random_Forest_Dice_Loss": {
+      "accuracy": 0.90625,
+      "confusion_matrix": [
+        [
+          16,
+          0
+        ],
+        [
+          3,
+          13
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n         0.0       0.84      1.00      0.91        16\n         1.0       1.00      0.81      0.90        16\n\n    accuracy                           0.91        32\n   macro avg       0.92      0.91      0.91        32\nweighted avg       0.92      0.91      0.91        32\n",
+      "optimal_threshold": 0.1842105263157895
+    },
+    "Random_Forest_Focal_Loss": {
+      "accuracy": 0.90625,
+      "confusion_matrix": [
+        [
+          16,
+          0
+        ],
+        [
+          3,
+          13
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n         0.0       0.84      1.00      0.91        16\n         1.0       1.00      0.81      0.90        16\n\n    accuracy                           0.91        32\n   macro avg       0.92      0.91      0.91        32\nweighted avg       0.92      0.91      0.91        32\n",
+      "optimal_threshold": 0.1842105263157895
+    },
+    "Random_Forest_Tversky_Loss": {
+      "accuracy": 0.90625,
+      "confusion_matrix": [
+        [
+          16,
+          0
+        ],
+        [
+          3,
+          13
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n         0.0       0.84      1.00      0.91        16\n         1.0       1.00      0.81      0.90        16\n\n    accuracy                           0.91        32\n   macro avg       0.92      0.91      0.91        32\nweighted avg       0.92      0.91      0.91        32\n",
+      "optimal_threshold": 0.1842105263157895
+    },
+    "Logistic_Regression_Dice_Loss": {
+      "accuracy": 0.90625,
+      "confusion_matrix": [
+        [
+          16,
+          0
+        ],
+        [
+          3,
+          13
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n         0.0       0.84      1.00      0.91        16\n         1.0       1.00      0.81      0.90        16\n\n    accuracy                           0.91        32\n   macro avg       0.92      0.91      0.91        32\nweighted avg       0.92      0.91      0.91        32\n",
+      "optimal_threshold": 0.1842105263157895
+    },
+    "Logistic_Regression_Focal_Loss": {
+      "accuracy": 0.90625,
+      "confusion_matrix": [
+        [
+          16,
+          0
+        ],
+        [
+          3,
+          13
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n         0.0       0.84      1.00      0.91        16\n         1.0       1.00      0.81      0.90        16\n\n    accuracy                           0.91        32\n   macro avg       0.92      0.91      0.91        32\nweighted avg       0.92      0.91      0.91        32\n",
+      "optimal_threshold": 0.1
+    },
+    "Logistic_Regression_Tversky_Loss": {
+      "accuracy": 0.90625,
+      "confusion_matrix": [
+        [
+          16,
+          0
+        ],
+        [
+          3,
+          13
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n         0.0       0.84      1.00      0.91        16\n         1.0       1.00      0.81      0.90        16\n\n    accuracy                           0.91        32\n   macro avg       0.92      0.91      0.91        32\nweighted avg       0.92      0.91      0.91        32\n",
+      "optimal_threshold": 0.1842105263157895
+    },
+    "Weighted_Logistic_Regression_Dice_Loss": {
+      "accuracy": 0.90625,
+      "confusion_matrix": [
+        [
+          16,
+          0
+        ],
+        [
+          3,
+          13
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n         0.0       0.84      1.00      0.91        16\n         1.0       1.00      0.81      0.90        16\n\n    accuracy                           0.91        32\n   macro avg       0.92      0.91      0.91        32\nweighted avg       0.92      0.91      0.91        32\n",
+      "optimal_threshold": 0.1842105263157895
+    },
+    "Weighted_Logistic_Regression_Focal_Loss": {
+      "accuracy": 0.90625,
+      "confusion_matrix": [
+        [
+          16,
+          0
+        ],
+        [
+          3,
+          13
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n         0.0       0.84      1.00      0.91        16\n         1.0       1.00      0.81      0.90        16\n\n    accuracy                           0.91        32\n   macro avg       0.92      0.91      0.91        32\nweighted avg       0.92      0.91      0.91        32\n",
+      "optimal_threshold": 0.1
+    },
+    "Weighted_Logistic_Regression_Tversky_Loss": {
+      "accuracy": 0.90625,
+      "confusion_matrix": [
+        [
+          16,
+          0
+        ],
+        [
+          3,
+          13
+        ]
+      ],
+      "classification_report": "              precision    recall  f1-score   support\n\n         0.0       0.84      1.00      0.91        16\n         1.0       1.00      0.81      0.90        16\n\n    accuracy                           0.91        32\n   macro avg       0.92      0.91      0.91        32\nweighted avg       0.92      0.91      0.91        32\n",
+      "optimal_threshold": 0.1842105263157895
+    }
+  },
+  "presence_count": 79,
+  "absence_count": 79,
+  "feature_count": 25
+}
