@@ -244,7 +244,7 @@ def optimize_threshold_for_metric(y_true, y_pred_proba, metric='tpr', min_accura
     """
     from sklearn.metrics import f1_score, balanced_accuracy_score, confusion_matrix
     
-    thresholds = np.linspace(0.1, 0.9, 20)
+    thresholds = np.linspace(0.10, 0.90, 100)
     best_threshold = 0.5
     best_metric_value = 0
 

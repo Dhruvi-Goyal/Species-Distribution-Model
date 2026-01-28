@@ -1,0 +1,67 @@
+class CustomLossLogisticRegression:
+    def __init__(self, loss_type='dice', loss_params=None, max_iter=1000, lr=0.01, l2=1e-3):
+        self.loss_type, self.loss_params = loss_type, loss_params or {}
+        self.max_iter, self.lr, self.l2 = max_iter, lr, l2
+        self.coef_, self.intercept_ = None, None
+
+    def _sig(self, z):
+        return 1 / (1 + np.exp(-np.clip(z, -500, 500)))
+
+    def _loss(self, y, p):
+        return {
+            'dice': dice_loss,
+            'focal': focal_loss,
+            'tversky': tversky_loss
+        }[self.loss_type](y, p, **self.loss_params)
+        
+    def _loss_and_grad(self, y, p):
+        if self.loss_type == 'dice':
+            return dice_loss(y, p), dice_grad(y, p, **self.loss_params)
+        elif self.loss_type == 'focal':
+            return focal_loss(y, p, **self.loss_params), focal_grad(y, p, **self.loss_params)
+        elif self.loss_type == 'tversky':
+            return tversky_loss(y, p, **self.loss_params), tversky_grad(y, p, **self.loss_params)
+
+
+    def fit(self, X, y, sample_weights=None):
+        X, y = X.astype(float), y.astype(float)
+        n, m = X.shape
+        coef, intc = np.zeros(m), 0.0
+        for _ in range(self.max_iter):
+            z = X.dot(coef) + intc
+            p = self._sig(z)
+            
+            # get loss and gradient wrt predictions
+            loss, dLdp = self._loss_and_grad(y, p)
+            loss += 0.5 * self.l2 * np.sum(coef**2)
+            
+            # chain rule: dL/dz = dL/dp * dp/dz
+            dpdz = p * (1 - p)      # derivative of sigmoid
+            grad_z = dLdp * dpdz    # per-sample gradient
+            
+            if sample_weights is not None:
+                grad_z *= sample_weights
+            
+            denom = sample_weights.sum() if sample_weights is not None else n
+            grad_c = (X.T.dot(grad_z) + self.l2 * coef) / denom
+            grad_i = grad_z.mean()
+            
+            coef -= self.lr * grad_c
+            intc -= self.lr * grad_i
+            
+           
+            # print(intc)
+            
+            if loss < 1e-6:
+                break
+        print("coef:", coef, "intc:", intc)
+        self.coef_, self.intercept_ = coef.reshape(1, -1), np.array([intc])
+        return self
+
+    def predict_proba(self, X):
+        z = X.dot(self.coef_.T) + self.intercept_
+        p = self._sig(z).flatten()
+        return np.column_stack([1 - p, p])
+
+    def predict(self, X):
+        return (self.predict_proba(X)[:, 1] >= 0.5).astype(int)

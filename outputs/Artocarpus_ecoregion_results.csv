@@ -1,0 +1,13 @@
+model_loss,error,accuracy,precision,recall,f1,tpr,tnr,optimal_threshold
+Random_Forest_Original_Loss,Input sample_weight contains NaN.,,,,,,,
+Random_Forest_Dice_Loss,Input sample_weight contains NaN.,,,,,,,
+Random_Forest_Focal_Loss,Input sample_weight contains NaN.,,,,,,,
+Random_Forest_Tversky_Loss,Input sample_weight contains NaN.,,,,,,,
+Logistic_Regression_Original_Loss,'precision',,,,,,,
+Logistic_Regression_Dice_Loss,,0.6088516746411483,0.5725075528700906,0.8959810874704491,0.6986175115207374,0.8959810874704491,0.31476997578692495,0.4368421052631579
+Logistic_Regression_Focal_Loss,,0.49401913875598086,0.0,0.0,0.0,0.0,1.0,0.7736842105263158
+Logistic_Regression_Tversky_Loss,,0.5299043062200957,0.5183823529411765,1.0,0.6828087167070218,1.0,0.048426150121065374,0.1
+Weighted_Logistic_Regression_Original_Loss,Input sample_weight contains NaN.,,,,,,,
+Weighted_Logistic_Regression_Dice_Loss,Input sample_weight contains NaN.,,,,,,,
+Weighted_Logistic_Regression_Focal_Loss,Input sample_weight contains NaN.,,,,,,,
+Weighted_Logistic_Regression_Tversky_Loss,Input sample_weight contains NaN.,,,,,,,

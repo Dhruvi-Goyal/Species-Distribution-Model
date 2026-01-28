@@ -1,0 +1,29 @@
+import geopandas as gpd
+import pandas as pd
+import elevation
+import os
+
+# === PARAMETERS ===
+occ_csv = "occurrences_with_shap.csv"   # must have latitude, longitude
+lat_col, lon_col = "latitude", "longitude"
+out_tif = "elevation.tif"
+
+# === 1. Load occurrence data ===
+occ = pd.read_csv(occ_csv)
+gdf = gpd.GeoDataFrame(
+    occ, geometry=gpd.points_from_xy(occ[lon_col], occ[lat_col]), crs="EPSG:4326"
+)
+
+# bounding box around occurrences (pad by a bit for coverage)
+minx, miny, maxx, maxy = gdf.total_bounds
+pad = 0.5   # add ~0.5° buffer
+bounds = (minx - pad, miny - pad, maxx + pad, maxy + pad)
+
+# === 2. Download DEM using `elevation` package ===
+# Temporary files
+cache_dir = "srtm_cache"
+os.makedirs(cache_dir, exist_ok=True)
+
+elevation.clip(bounds=bounds, output=out_tif, product="SRTM1")
+
+print(f"Elevation raster saved to: {out_tif}")

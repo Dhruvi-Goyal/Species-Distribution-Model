@@ -1,3 +1,3 @@
 genus,model_loss,accuracy_mean,accuracy_std,accuracy_min,accuracy_max,accuracy_count,tpr_mean,tpr_std,tpr_min,tpr_max,tnr_mean,tnr_std,tnr_min,tnr_max
-Macaranga,RF_Dice,0.9118,0.0621,0.8125,1.0,10,0.6213,0.4547,0.0,1.0,0.8387,0.2996,0.0,1.0
+Artemisia,RF_Dice,0.9497,0.0652,0.7895,1.0,12,0.5417,0.4981,0.0,1.0,0.9713,0.045,0.8824,1.0
 Memecylon,RF_Dice,0.8806,0.1308,0.6,1.0,7,0.848,0.1781,0.5,1.0,0.9439,0.1007,0.75,1.0

@@ -219,9 +219,26 @@ class Feature_Extractor():
             print(f"Warning: None value for {cnt}. Skipping normalization for these keys.")
         return normalized
 
+    # def process_point(self, row):
+    #     """
+    #     Handles one row (one geo-point) and returns its normalized feature values.
+    #     """
+    #     latitude = row['latitude']
+    #     longitude = row['longitude']
+
+    #     if pd.isna(latitude) or pd.isna(longitude):
+    #         return None
+
+    #     values = self.get_feature_values_at_point(latitude, longitude)
+    #     # print(values)
+    #     normalized_values = self.normalize_bioclim_values(values)
+    #     return {'longitude': longitude, 'latitude': latitude, **normalized_values}
+    
+    
+    
     def process_point(self, row):
         """
-        Handles one row (one geo-point) and returns its normalized feature values.
+        Handles one row (one geo-point) and returns both normalized and raw feature values.
         """
         latitude = row['latitude']
         longitude = row['longitude']
@@ -229,9 +246,23 @@ class Feature_Extractor():
         if pd.isna(latitude) or pd.isna(longitude):
             return None
 
+        # 1️⃣ Get raw feature values (e.g., elevation in meters)
         values = self.get_feature_values_at_point(latitude, longitude)
+        if values is None:
+            return None
+
+        # 2️⃣ Keep a copy of the raw elevation (before normalization)
+        raw_elevation = values.get('elevation', None)
+
+        # 3️⃣ Normalize features for ML model input
         normalized_values = self.normalize_bioclim_values(values)
+
+        # 4️⃣ Add raw elevation as a separate column for visualization
+        if raw_elevation is not None:
+            normalized_values['elevation_true_m'] = raw_elevation
+
         return {'longitude': longitude, 'latitude': latitude, **normalized_values}
+
 
     def add_features(self, occurrences, batch_size=4000):
         """
