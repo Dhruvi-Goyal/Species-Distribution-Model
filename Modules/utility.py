@@ -1,5 +1,6 @@
 # Import necessary libraries for geospatial analysis, machine learning, and data processing
 from . import features_extractor
+from . import presence_dataloader
 # import features_extractor
 
 import geopandas as gpd
@@ -344,6 +345,169 @@ def save_matrix_to_text(matrix, filename, labels):
             formatted_row = f"{row_label:<50}\t" + '\t'.join(row_values) + '\n'
             f.write(formatted_row)
 
+def fetch_gbif_and_extract_features(ee=None, max_points=2000, filter_forest=True):
+    """
+    Fetches presence points from GBIF using Presence_dataloader and extracts environmental features from WorldClim.
+    Reads genus name from Inputs/genus_name.txt and polygon from Inputs/polygon.wkt.
+    Optionally filters presence points to retain only those within forest regions using Dynamic World LULC.
+    Saves results to a CSV file.
+    
+    Args:
+        ee: Earth Engine object for feature extraction. Must be initialized.
+        max_points (int): Maximum number of presence points to fetch (default: 2000)
+        filter_forest (bool): If True, filter presence points to retain only those within forest regions
+                             (LULC label = 1 for trees) using Dynamic World dataset (default: True)
+        output_file (str): Path to save the output CSV file with features (default: "data/presence_points_with_features.csv")
+    
+    Returns:
+        str: Path to the saved CSV file with presence points and features
+    """
+    # Initialize Earth Engine if not provided
+    if ee is None:
+        try:
+            import ee as earth_engine
+            earth_engine.Initialize()
+            ee = earth_engine
+        except Exception as e:
+            raise ValueError(f"Earth Engine not initialized. Please initialize Earth Engine: {e}")
+    
+    # Check if genus_name.txt exists
+    try:
+        with open("Inputs/genus_name.txt", "r") as genus_file:
+            genus_name = genus_file.read().strip()
+        print(f"Using genus name from Inputs/genus_name.txt: {genus_name}")
+    except FileNotFoundError:
+        raise FileNotFoundError("Inputs/genus_name.txt not found. Please create this file with the genus name.")
+    
+    # Check if polygon.wkt exists
+    try:
+        with open("Inputs/polygon.wkt", "r") as polygon_file:
+            polygon_wkt = polygon_file.read().strip()
+    except FileNotFoundError:
+        raise FileNotFoundError("Inputs/polygon.wkt not found. Please create this file with the polygon boundary.")
+    
+    # Use Presence_dataloader to fetch GBIF data
+    print(f"Fetching GBIF data for genus: {genus_name}")
+    print(f"Using polygon from Inputs/polygon.wkt")
+    dataloader = presence_dataloader.Presence_dataloader()
+    occurrence_points = dataloader.load_raw_presence_data(maxp=max_points)
+    
+    if len(occurrence_points) == 0:
+        print(f"\nWARNING: No occurrence points found for genus: {genus_name}")
+        print("Possible reasons:")
+        print("1. The polygon boundary might be too restrictive")
+        print("2. The date range (2017-2023) might be too restrictive")
+        print("3. There might be no GBIF records for this genus in the specified area")
+        print("4. Check your Inputs/polygon.wkt file format")
+        print("\nTry:")
+        print("- Removing or expanding the date range filter")
+        print("- Checking if the polygon WKT format is correct")
+        print("- Verifying the genus name spelling")
+        raise ValueError(f"No occurrence points found for genus: {genus_name}")
+    
+    print(f"\nFound {len(occurrence_points)} presence points from GBIF.")
+    
+    # Convert to DataFrame
+    coords_df = pd.DataFrame(list(occurrence_points), columns=["longitude", "latitude"])
+    
+    # Convert polygon_wkt to Earth Engine geometry for LULC filtering if needed
+    polygon_ee_geom = None
+    if filter_forest:
+        try:
+            polygon_shapely = loads(polygon_wkt)
+            coords = list(polygon_shapely.exterior.coords)
+            polygon_ee_geom = ee.Geometry.Polygon([[[lon, lat] for lon, lat in coords]])
+        except Exception as e:
+            print(f"Warning: Could not convert polygon to EE geometry for LULC filtering: {e}")
+            filter_forest = False
+    
+    # Filter by forest LULC if requested
+    if filter_forest and polygon_ee_geom is not None:
+        print(f"Filtering {len(coords_df)} points to retain only forest regions (LULC tree label)...")
+        coords_df = filter_points_by_forest_lulc(coords_df, polygon_ee_geom, ee)
+        print(f"After forest filtering: {len(coords_df)} points remain.")
+    
+    if len(coords_df) == 0:
+        raise ValueError("No presence points remain after filtering. Try setting filter_forest=False or checking your polygon boundaries.")
+    
+    print(f"Extracting features from WorldClim for {len(coords_df)} points...")
+    
+    # Extract features using Feature_Extractor
+    feature_extractor = features_extractor.Feature_Extractor(ee)
+    features_df = feature_extractor.add_features(coords_df)
+    
+    print(f"Feature extraction completed. Shape: {features_df.shape}")
+    print(f"Feature columns: {list(features_df.columns)}")
+    
+    # Save to file
+    output_file=f"presence_points_{genus_name}.csv"
+    os.makedirs(os.path.dirname(output_file) if os.path.dirname(output_file) else ".", exist_ok=True)
+    features_df.to_csv(output_file, index=False)
+    print(f"Results saved to: {output_file}")
+    
+    return output_file
+
+
+def filter_points_by_forest_lulc(coords_df, polygon_ee_geom, ee):
+    """
+    Filters presence points to retain only those within forest regions (LULC label = 1 for trees)
+    using Dynamic World Land Use and Land Cover dataset.
+    
+    Args:
+        coords_df (pandas.DataFrame): DataFrame with 'longitude' and 'latitude' columns
+        polygon_ee_geom: Earth Engine Geometry object for the study area polygon
+        ee: Earth Engine object
+    
+    Returns:
+        pandas.DataFrame: Filtered DataFrame with only forest points
+    """
+    # Load Dynamic World LULC image collection
+    lulc_collection = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1") \
+        .filterBounds(polygon_ee_geom) \
+        .select('label')  # Use only the 'label' band
+    
+    # Compute the most frequent LULC class (mode) for each pixel across time
+    mode_lulc = lulc_collection.mode().clip(polygon_ee_geom)
+    
+    # Convert DataFrame to Earth Engine FeatureCollection
+    features = []
+    for _, row in coords_df.iterrows():
+        lon, lat = row['longitude'], row['latitude']
+        point = ee.Geometry.Point([lon, lat])
+        features.append(ee.Feature(point).set({'longitude': lon, 'latitude': lat}))
+    
+    fc = ee.FeatureCollection(features)
+    
+    # Map over features to extract LULC label and filter for forest (label = 1)
+    def add_lulc_label(feature):
+        point = feature.geometry()
+        lulc_value = mode_lulc.reduceRegion(
+            reducer=ee.Reducer.mode(),
+            geometry=point,
+            scale=10,  # Dynamic World has 10m resolution
+            maxPixels=1e9
+        ).get('label')
+        return feature.set('lulc_label', lulc_value)
+    
+    filtered_fc = fc.map(add_lulc_label).filter(ee.Filter.eq('lulc_label', 1))  # 1 = trees/forest
+    
+    # Convert filtered FeatureCollection back to DataFrame
+    try:
+        features_info = filtered_fc.getInfo()['features']
+        filtered_data = []
+        for feature in features_info:
+            props = feature['properties']
+            filtered_data.append({
+                'longitude': props.get('longitude'),
+                'latitude': props.get('latitude')
+            })
+        return pd.DataFrame(filtered_data)
+    except Exception as e:
+        print(f"Warning: Error converting filtered points to DataFrame: {e}")
+        print("Returning original DataFrame without LULC filtering.")
+        return coords_df
+
+
 def calculate_concentration_index(presence_points_csv, ecoregion_wkt_directory):
     """
     Calculates the concentration index for a species based on the number of ecoregions
@@ -406,13 +570,13 @@ def calculate_concentration_index(presence_points_csv, ecoregion_wkt_directory):
 
 def calculate_endemicity_index(presence_points_csv, ecoregion_wkt_directory):
     """
-    Calculates the endemicity index for a species based on the entropy of presence point
-    distribution across ecoregions. The endemicity value is the sum of entropy values
-    for each ecoregion, where entropy = -p*log(p) and p is the proportion of presence
-    points in that ecoregion relative to total presence points.
+    Calculates the endemicity index for a species based on the number of ecoregions 
+    where the species is found (in ERA and ATREE).
     
-    A higher endemicity value indicates the species is more concentrated in specific
-    ecoregions (more endemic), while a lower value indicates more uniform distribution.
+    Endemicity Index = Number of eco-regions the species is found in
+    
+    Species with endemicity index > 1 are considered non-endemic; 
+    otherwise, they are considered endemic.
     
     Args:
         presence_points_csv (str): Path to CSV file containing presence points with columns:
@@ -420,9 +584,76 @@ def calculate_endemicity_index(presence_points_csv, ecoregion_wkt_directory):
         ecoregion_wkt_directory (str): Path to directory containing .wkt files for each ecoregion
     
     Returns:
-        float: Endemicity index (sum of entropy values across all ecoregions with presence)
-        dict: Dictionary mapping ecoregion names to their entropy values
+        int: Endemicity index (number of ecoregions where species is present)
+        list: List of ecoregion names where species is present
+        str: Classification - "endemic" if index <= 1, "non-endemic" if index > 1
+    """
+    # Read presence points CSV
+    presence_df = pd.read_csv(presence_points_csv)
+    
+    # Extract longitude and latitude columns
+    presence_points = []
+    for _, row in presence_df.iterrows():
+        point = Point(row['longitude'], row['latitude'])
+        presence_points.append(point)
+    
+    # Initialize set to store unique ecoregions where species is present
+    ecoregions_with_presence = set()
+    
+    # Process each WKT file in the ecoregion directory
+    for filename in os.listdir(ecoregion_wkt_directory):
+        if filename.endswith('.wkt'):
+            ecoregion_name = filename.replace('.wkt', '')
+            
+            # Read WKT polygon from file
+            with open(os.path.join(ecoregion_wkt_directory, filename), 'r') as file:
+                polygon_wkt = file.read().strip()
+            
+            # Convert WKT to Shapely polygon
+            try:
+                ecoregion_polygon = loads(polygon_wkt)
+                
+                # Check if any presence points fall within this ecoregion
+                for point in presence_points:
+                    if ecoregion_polygon.contains(point):
+                        ecoregions_with_presence.add(ecoregion_name)
+                        break  # Found at least one point in this ecoregion, move to next
+                        
+            except Exception as e:
+                print(f"Error processing {filename}: {e}")
+                continue
+    
+    # Calculate endemicity index - simply the count of ecoregions
+    endemicity_index = len(ecoregions_with_presence)
+    
+    # Determine classification
+    classification = "endemic" if endemicity_index <= 1 else "non-endemic"
+    
+    return endemicity_index, list(ecoregions_with_presence), classification
+
+def calculate_entropy_index(presence_points_csv, ecoregion_wkt_directory):
+    """
+    Calculates the entropy index (Ci) for a species based on the distribution of 
+    presence points across ecoregions.
+    
+    Entropy Index formula: Ci = -Σ(pij * log(pij))
+    
+    where pij is the probability of finding species i in the jth eco-region:
+    pij = (#Occurrences of species i in eco-region j) / (#Total occurrences of species i)
+    
+    If the Entropy Index > 2, the species is considered sparse; 
+    otherwise, it is considered concentrated.
+    
+    Args:
+        presence_points_csv (str): Path to CSV file containing presence points with columns:
+                                 longitude, latitude, and environmental features
+        ecoregion_wkt_directory (str): Path to directory containing .wkt files for each ecoregion
+    
+    Returns:
+        float: Entropy index (sum of -p*log(p) values across all ecoregions with presence)
+        dict: Dictionary mapping ecoregion names to their entropy contributions
         dict: Dictionary mapping ecoregion names to their presence point counts
+        str: Classification - "sparse" if entropy > 2, "concentrated" otherwise
     """
     import math
     
@@ -467,22 +698,24 @@ def calculate_endemicity_index(presence_points_csv, ecoregion_wkt_directory):
                 continue
     
     # Calculate entropy for each ecoregion with presence points
-    ecoregion_entropy = {}
-    total_endemicity = 0.0
+    ecoregion_entropy_contributions = {}
+    total_entropy = 0.0
     
     for ecoregion_name, point_count in ecoregion_presence_counts.items():
-        # Calculate proportion of presence points in this ecoregion
-        p = point_count / total_presence_points
+        # Calculate probability: pij = occurrences in ecoregion j / total occurrences
+        pij = point_count / total_presence_points
         
-        # Calculate entropy: -p * log(p)
+        # Calculate entropy contribution: -pij * log(pij)
         # Use natural logarithm (math.log) for entropy calculation
-        entropy = -p * math.log(p)
+        entropy_contribution = -pij * math.log(pij)
         
-        ecoregion_entropy[ecoregion_name] = entropy
-        total_endemicity += entropy
+        ecoregion_entropy_contributions[ecoregion_name] = entropy_contribution
+        total_entropy += entropy_contribution
     
-    return total_endemicity
-
+    # Determine classification
+    classification = "sparse" if total_entropy > 2 else "concentrated"
+    
+    return total_entropy, ecoregion_entropy_contributions, ecoregion_presence_counts, classification
 def calculate_indices_for_all_species(all_species_presence_csv, ecoregion_wkt_directory, output_csv_path="outputs/species_indices.csv"):
     """
     Calculates concentration and endemicity indices for all species in a dataset.
@@ -920,7 +1153,7 @@ def print_top_10_presence_features():
     print("\n" + "="*80 + "\n")
     
     # Initialize Earth Engine and feature extractor
-    ee.Initialize()
+    ee.Initialize(project='ee-mtpictd')
     fe = Feature_Extractor(ee)
     
     print("Extracting features for top 10 presence points...")
@@ -999,7 +1232,7 @@ def print_top_n_presence_features(start_row, end_row, append_to_existing=False):
     print("\n" + "="*80 + "\n")
     
     # Initialize Earth Engine and feature extractor
-    ee.Initialize()
+    ee.Initialize(project='ee-mtpictd')
     fe = Feature_Extractor(ee)
     
     print(f"Extracting features for {len(range_presence)} presence points...")
@@ -1115,8 +1348,50 @@ def cleanup_presence_feature_files(species_list=None):
     print("Cleanup completed!")
 
 if __name__ == "__main__":
-    # print(calculate_concentration_index("data/testing_SDM/presence_points_Dalbergia_all_india.csv", "data/eco_regions_polygon"))
-    # print(calculate_endemicity_index("data/testing_SDM/presence_points_Dalbergia_all_india.csv", "data/eco_regions_polygon"))
+    # Step 1: Fetch GBIF data and extract features (reads from Inputs/genus_name.txt and Inputs/polygon.wkt)
+    import ee
+    ee.Initialize(project='ee-mtpictd')
+    
+    # Fetch data from GBIF and extract features, save to file
+    output_file = fetch_gbif_and_extract_features(
+        ee=ee,
+        max_points=3000,
+        filter_forest=True,  # Filter to forest regions only
+    )
+    
+    # Step 2: Use the saved file for calculations (as before)
+    
+    # output_file=f"presence_points_Mangifera.csv"
+    
+    endemicity_index, ecoregions_list, endemic_classification = calculate_endemicity_index(
+        presence_points_csv=output_file,
+        ecoregion_wkt_directory="data/eco_regions_polygon"
+    )
+    
+    # 3. Calculate concentration index
+    concentration_index, num_ecoregions, _ = calculate_concentration_index(
+        presence_points_csv=output_file,
+        ecoregion_wkt_directory="data/eco_regions_polygon"
+    )
+    
+    # 4. Calculate entropy index
+    entropy_index, entropy_contributions, ecoregion_counts, entropy_classification = calculate_entropy_index(
+        presence_points_csv=output_file,
+        ecoregion_wkt_directory="data/eco_regions_polygon"
+    )
+    
+    # Print the values
+    print(f"\n{'='*60}")
+    print(f"{'='*60}")
+    print(f"Endemicity Index: {endemicity_index} ({endemic_classification})")
+    print(f"  - Species is {endemic_classification}")
+    print(f"Concentration Index: {concentration_index:.4f}")
+    print(f"  - Number of ecoregions with presence: {num_ecoregions}")
+    print(f"Entropy Index: {entropy_index:.4f} ({entropy_classification})")
+    print(f"  - Species is {entropy_classification}")
+    print(f"Ecoregions list: {ecoregions_list}")
+    print(f"{'='*60}\n")
+    
     # calculate_indices_for_all_species("data/testing_SDM/all_presence_point.csv", "data/eco_regions_polygon")
     # calculate_indices_for_all_genera("data/testing_SDM/all_presence_point.csv", "data/eco_regions_polygon")
     
@@ -1125,4 +1400,4 @@ if __name__ == "__main__":
     
     # To append more points, you can call:
     # print_top_n_presence_features(1, 20001, append_to_existing=False)
-    print_top_n_presence_features(80000, 100000, append_to_existing=False)
+    # print_top_n_presence_features(80000, 100000, append_to_existing=False)

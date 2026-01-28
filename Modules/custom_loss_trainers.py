@@ -359,9 +359,12 @@ def evaluate_summary(X, y, all_df=None, min_points=10, optimize_for='tpr', speci
             X_tr, X_te, y_tr, y_te, idx_tr, idx_te = train_test_split(
                 X, y, indices, test_size=0.2, random_state=42, stratify=y
             )
+            
             print(f"Model: {m}, Loss: {name} | Train size: {len(X_tr)}, Test size: {len(X_te)}")
             sw = np.ones(len(y_tr)) if m == 'WLR' else None
+            
             clf = train_funcs[m](X_tr, y_tr, sw, lt, lp)
+            
             y_proba = clf.predict_proba(X_te)[:, 1]
             from .custom_losses import optimize_threshold_for_metric
             optimal_threshold, best_metric_value = optimize_threshold_for_metric(y_te, y_proba, metric=optimize_for, min_accuracy=0.5)
@@ -2301,7 +2304,7 @@ def perform_feature_importance_for_all_genera(genus_list, features_csv_path="dat
         result = comprehensive_genus_with_precomputed_features(
             genus=genus_name, 
             features_csv_path=features_csv_path,
-            optimize_for='f1'
+            optimize_for='tpr'
         )
         
         if result is None:
@@ -3222,17 +3225,16 @@ def perform_feature_importance_for_ecoregion_genera(genus_list, features_csv_pat
 # Example usage at the end of the file
 if __name__ == "__main__":
     # Example: Generate SHAP analysis for ecoregion-level models
-    species_list = ["Dalbergia sissoo","Syzygium cumini"]
+    # species_list = ["Dalbergia sissoo","Syzygium cumini"]
     # perform_feature_importance_for_ecoregion_species(species_list)
     
-    genus_list = ["Memecylon","Macaranga"]
-    # perform_feature_importance_for_ecoregion_genera(genus_list)
+    genus_list = ["Artemisia","Macaranga","Erythrina"]
+    perform_feature_importance_for_ecoregion_genera(genus_list)
     
     # Test ecoregion-level modeling
     # genus_list = ["Erythrina","Macaranga"]
-    for genus in genus_list:
-        # comprehensive_genus_with_precomputed_features(genus, features_csv_path="data/presence_points_with_features.csv")
-        all_ecoregion_level_genus_with_precomputed_features(genus, features_csv_path="data/presence_points_with_features.csv")
+    # for genus in genus_list:
+    #     # comprehensive_genus_with_precomputed_features(genus, features_csv_path="data/presence_points_with_features.csv")
+    #     all_ecoregion_level_genus_with_precomputed_features(genus, features_csv_path="data/presence_points_with_features.csv")
   
-
 

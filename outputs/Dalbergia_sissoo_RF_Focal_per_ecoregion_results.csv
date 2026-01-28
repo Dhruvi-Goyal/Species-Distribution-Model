@@ -1,0 +1,10 @@
+ecoregion,accuracy,tpr,tnr,n_test_points,n_presence_test,n_absence_test
+Central_Deccan_Plateau_dry_deciduous_forests,1.0,1.0,1.0,19,12,7
+Deccan_thorn_scrub_forests,1.0,1.0,1.0,12,2,10
+East_Deccan_moist_deciduous_forests,1.0,1.0,1.0,15,6,9
+Khathiar_Gir_dry_deciduous_forests,1.0,1.0,1.0,12,7,5
+Lower_Gangetic_Plains_moist_deciduous_forests,1.0,1.0,1.0,13,10,3
+Malabar_Coast_moist_forests,1.0,1.0,1.0,25,11,14
+Narmada_Valley_dry_deciduous_forests,1.0,1.0,1.0,10,9,1
+South_Deccan_Plateau_dry_deciduous_forests,1.0,1.0,1.0,18,10,8
+Upper_Gangetic_Plains_moist_deciduous_forests,1.0,1.0,1.0,13,8,5

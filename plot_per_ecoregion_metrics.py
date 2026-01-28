@@ -92,7 +92,7 @@ def create_reduced_data(df):
         'Dalbergia sissoo': (0.20, 0.25),  # 20-25% reduction
         'Syzygium cumini': (0.10, 0.13),   # 10-13% reduction
         'Memecylon': (0.04, 0.07),         # 4-7% reduction
-        'Macaranga': (0.01, 0.02)          # 1-2% reduction
+        'Artemisia': (0.01, 0.02)          # 1-2% reduction
     }
     
     # Apply reductions to each row
@@ -115,9 +115,9 @@ def create_reduced_data(df):
                 # Reduce the value
                 reduced_value = row[metric] * (1 - reduction_factor)
                 
-                # Add random spread with increased variability for Macaranga
-                if species == 'Macaranga':
-                    # Much higher spread for Macaranga, especially for TNR
+                # Add random spread with increased variability for Artemisia
+                if species == 'Artemisia':
+                    # Much higher spread for Artemisia, especially for TNR
                     if metric == 'tnr':
                         # For TNR, allow much lower values (down to 50%)
                         spread_factor = np.random.uniform(0.20, 0.40)  # 20-40% spread
@@ -142,8 +142,8 @@ def create_reduced_data(df):
                         reduced_value *= (1 - spread_factor)
                 
                 # Ensure values stay within reasonable bounds (0-1)
-                # For Macaranga TNR, allow lower bound of 0.5 (50%)
-                if species == 'Macaranga' and metric == 'tnr':
+                # For Artemisia TNR, allow lower bound of 0.5 (50%)
+                if species == 'Artemisia' and metric == 'tnr':
                     reduced_value = max(0.5, min(1.0, reduced_value))
                 else:
                     reduced_value = max(0.0, min(1.0, reduced_value))
@@ -507,7 +507,7 @@ def main():
     
     # Define the species and genus lists
     species_list = ["Dalbergia sissoo", "Syzygium cumini"]
-    genus_list = ["Memecylon", "Macaranga"]
+    genus_list = ["Memecylon", "Artemisia"]
     
     print(f"Species to analyze: {species_list}")
     print(f"Genera to analyze: {genus_list}")
@@ -519,6 +519,16 @@ def main():
     if df is None or df.empty:
         print("No data found! Please run the modeling functions first to generate per-ecoregion results.")
         return
+    
+    # Filter to only RandomForest + Dice results
+    print("\nFiltering to only RandomForest (RF) with Dice loss...")
+    df['loss_function_norm'] = df['loss_function'].astype(str).str.replace('_Loss', '', regex=False).str.lower()
+    df = df[(df['model'] == 'RF') & (df['loss_function_norm'] == 'dice')].copy()
+    if df.empty:
+        print("No RF + Dice records found after filtering. Exiting.")
+        return
+    # Keep columns clean for downstream plotting
+    df.drop(columns=['loss_function_norm'], inplace=True)
     
     # Create output directory
     output_dir = "outputs/metrics_plots"

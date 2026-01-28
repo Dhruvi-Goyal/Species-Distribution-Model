@@ -18,7 +18,7 @@ from sklearn.model_selection import train_test_split
 from Modules.feature_sensitivity_analysis import FeatureSensitivityAnalyzer
 from Modules.models import perform_feature_importance_for_all_species
 ee.Authenticate()
-ee.Initialize(project='sigma-bay-425614-a6')
+ee.Initialize(project='ee-ictd-dhruvi')
 
 
 

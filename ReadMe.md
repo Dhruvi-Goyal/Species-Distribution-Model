@@ -27,7 +27,10 @@ This pipeline helps in generating species distribution models (SDM) by utilizing
 - Generates **pseudo-absence points** within tree-covered regions.
 
 ### **7. `utility.py`**
-- Currently empty but serves as a placeholder for future **utility functions**.
+- **Main Pipeline Function:** `fetch_gbif_and_extract_features()` - Fetches GBIF data and extracts WorldClim features
+- **Forest Filtering:** `filter_points_by_forest_lulc()` - Filters presence points to forest regions using Dynamic World LULC
+- **Index Calculations:** `calculate_concentration_index()`, `calculate_endemicity_index()` - Ecoregion distribution metrics
+- **Spatial Utilities:** Polygon grid sampling, feature vector extraction, similarity calculations
 
 ---
 
@@ -49,9 +52,16 @@ Users must provide the following inputs in the `Inputs` folder:
 
 ## **Pipeline Workflow**
 - The pipeline automates the process:
-  1. **Fetch presence points** from GBIF using its API (this can be slow).
-  2. Optionally, users can download and place **presence points** manually in the `data` folder for faster processing.
-  3. Generates or uses provided **pseudo-absence points** (can also be added manually in the `data` folder).
+  1. **Fetch presence points** from GBIF using its API (reads genus name from `Inputs/genus_name.txt`)
+  2. **Filter by forest regions** (optional) using Dynamic World LULC dataset
+  3. **Extract environmental features** from WorldClim and other datasets
+  4. **Normalize features** using min-max normalization (scaled to [0, 1])
+  5. **Save results** to CSV file for further analysis
+  6. **Calculate indices** (concentration, endemicity) using utility functions
+  7. Optionally, users can download and place **presence points** manually in the `data` folder for faster processing
+  8. Generates or uses provided **pseudo-absence points** (can also be added manually in the `data` folder)
+
+**See `PIPELINE_DOCUMENTATION.md` for complete pipeline details.**
 
 ---
 

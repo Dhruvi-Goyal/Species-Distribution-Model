@@ -1,0 +1,8 @@
+resolution_m,error
+10,Feature_Extractor.add_features() got an unexpected keyword argument 'scale'
+30,Feature_Extractor.add_features() got an unexpected keyword argument 'scale'
+50,Feature_Extractor.add_features() got an unexpected keyword argument 'scale'
+100,Feature_Extractor.add_features() got an unexpected keyword argument 'scale'
+250,Feature_Extractor.add_features() got an unexpected keyword argument 'scale'
+500,Feature_Extractor.add_features() got an unexpected keyword argument 'scale'
+1000,Feature_Extractor.add_features() got an unexpected keyword argument 'scale'

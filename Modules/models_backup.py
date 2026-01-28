@@ -1767,7 +1767,7 @@ if __name__ == "__main__":
     models = Models()
     
     # Define taxa for modeling
-    genus_list = ["Ficus", "Erythrina"]  # Genus-level modeling
+    genus_list = ["Memecylon"]  # Genus-level modeling
     species_list = ["Dalbergia sissoo", "Syzygium cumini"]  # Species-level modeling
     
     print("\n" + "="*80)
@@ -1786,13 +1786,13 @@ if __name__ == "__main__":
     
     # Run species-level modeling
     print(f"\n{'='*50}")
-    print("SPECIES-LEVEL MODELING")
-    print(f"{'='*50}")
-    for species in species_list:
-        try:
-            models.comprehensive_species_modeling(species)
-        except Exception as e:
-            print(f"Error modeling species {species}: {str(e)}")
+    # print("SPECIES-LEVEL MODELING")
+    # print(f"{'='*50}")
+    # for species in species_list:
+    #     try:
+    #         models.comprehensive_species_modeling(species)
+    #     except Exception as e:
+    #         print(f"Error modeling species {species}: {str(e)}")
     
     print(f"\n{'='*80}")
     print("COMPLETED ALL TAXA MODELING")

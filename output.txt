@@ -1,0 +1,6 @@
+
+============================================================
+ECOREGION-LEVEL MODELING FOR GENUS: Macaranga
+============================================================
+   Ecoregion with max presence points: Malabar_Coast_moist_forests (561 points)
+   Filtered to 561 presence and 561 pseudo-absence points in Malabar_Coast_moist_forests

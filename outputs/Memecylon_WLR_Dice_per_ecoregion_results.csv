@@ -1,8 +1,8 @@
 ecoregion,accuracy,tpr,tnr,n_test_points,n_presence_test,n_absence_test
-Deccan_thorn_scrub_forests,0.38461538461538464,1.0,0.0,13,5,8
-East_Deccan_dry_evergreen_forests,0.6,1.0,0.0,10,6,4
-Malabar_Coast_moist_forests,0.6190476190476191,1.0,0.0,21,13,8
-North_Western_Ghats_moist_deciduous_forests,0.6923076923076923,1.0,0.0,13,9,4
+Deccan_thorn_scrub_forests,0.6923076923076923,0.2,1.0,13,5,8
+East_Deccan_dry_evergreen_forests,0.4,0.0,1.0,10,6,4
+Malabar_Coast_moist_forests,0.9047619047619048,0.9230769230769231,0.875,21,13,8
+North_Western_Ghats_moist_deciduous_forests,0.9230769230769231,1.0,0.75,13,9,4
 North_Western_Ghats_montane_rain_forests,0.9375,1.0,0.0,16,15,1
-South_Deccan_Plateau_dry_deciduous_forests,0.36363636363636365,1.0,0.0,11,4,7
-South_Western_Ghats_montane_rain_forests,0.9375,1.0,0.0,16,15,1
+South_Deccan_Plateau_dry_deciduous_forests,0.7272727272727273,0.5,0.8571428571428571,11,4,7
+South_Western_Ghats_montane_rain_forests,1.0,1.0,1.0,16,15,1

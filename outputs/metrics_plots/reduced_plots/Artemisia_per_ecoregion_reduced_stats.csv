@@ -1,0 +1,13 @@
+ecoregion,genus,model,loss_function,model_loss,accuracy,tnr
+Aravalli_west_thorn_scrub_forests,Artemisia,RF,Dice,RF_Dice,0.6216880491640334,0.6490146318886852
+Central_Deccan_Plateau_dry_deciduous_forests,Artemisia,RF,Dice,RF_Dice,0.6979061240932781,1.0
+Deccan_thorn_scrub_forests,Artemisia,RF,Dice,RF_Dice,0.780832078537657,0.6859956393197008
+East_Deccan_moist_deciduous_forests,Artemisia,RF,Dice,RF_Dice,1.0,0.7291491978459521
+Karakoram_West_Tibetan_Plateau_alpine_steppe,Artemisia,RF,Dice,RF_Dice,0.8110522142790121,0.7744858286958852
+Khathiar_Gir_dry_deciduous_forests,Artemisia,RF,Dice,RF_Dice,0.763700253099684,0.5999622530754082
+Malabar_Coast_moist_forests,Artemisia,RF,Dice,RF_Dice,0.765291492720855,0.65170468613168
+Northwestern_Himalayan_alpine_shrub_and_meadows,Artemisia,RF,Dice,RF_Dice,0.8176667884152122,1.0
+South_Deccan_Plateau_dry_deciduous_forests,Artemisia,RF,Dice,RF_Dice,0.7201814299165186,0.5770801187503674
+South_Western_Ghats_montane_rain_forests,Artemisia,RF,Dice,RF_Dice,1.0,0.6475182768246805
+Upper_Gangetic_Plains_moist_deciduous_forests,Artemisia,RF,Dice,RF_Dice,1.0,1.0
+Western_Himalayan_broadleaf_forests,Artemisia,RF,Dice,RF_Dice,1.0,0.6920514425247406
